@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: headerFragment}">
+    <meta charset="UTF-8">
+    <title>addProgramme</title>
+</head>
+<body>
+<nav th:replace="~{fragments/navBar :: navBarFragment}"></nav>
+<!--Heading Area -->
+<div class="container-fluid bg-dark form-Border">
+    <div class="row text-center formManagement border-info">
+        <!--View List Button-->
+        <div class="col">
+            <a href="/programme" class="btn btn-primary" tabindex="1">
+                <i class="fa fa-list" style="font-size: 20px"></i>&nbsp;&nbsp;View List
+            </a>
+        </div>
+        <!--Form Name-->
+        <div class="col">
+            <h2 class="text-white text-center">
+                <strong>
+                    <span th:text="${addStatus==true?'Add New Supplier':'Update Supplier Details'}"></span>
+                </strong>
+            </h2>
+        </div>
+        <!--Home Button-->
+        <div class="col">
+            <a class="btn btn-primary" href="/home" tabindex="2">
+                <i class="fa fa-home" style="font-size: 20px"></i> &nbsp;&nbsp;Home
+            </a>
+        </div>
+    </div>
+</div>
+<!--Form Content - start -->
+<div class="container-fluid bg-dark formBorder">
+    <div class="col-sm-12 flex-column ">
+        <form id="form" class="form-horizontal" th:action="${addStatus==true?'/programme/save':'/programme/update'}"
+              th:object="${programme}" method="POST" enctype="multipart/form-data">
+            <div class="row">
+                <!--Left Side-->
+                <div class="form-group col-md-6 col-sm-6 text-left flex-column">
+                    <!--Id-->
+                    <div id="idStatus" th:if="${addStatus==false}" class="form-row text-right">
+                        <div class="col-md-4">
+                            <label class="control-label" for="id">ID :</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input id="id" th:field="*{id}" class="form-control" type="text" readonly/>
+                        </div>
+                    </div>
+                    <!--Programme Name-->
+                    <div class="form-row text-right">
+                        <div class="col-md-4">
+                            <label class="control-label" for="name">programme Name :</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input id="name" th:field="*{programmeName}" class="form-control" tabindex="3" type="text" required/>
+                            <span id="nameError" th:errors="*{programmeName}"
+                                  th:if="${#fields.hasErrors('programmeName')}" class="error">Error Name</span>
+                        </div>
+                    </div>
+                    <!--code-->
+                    <div class="form-row text-right" th:if="${addStatus==false}">
+                        <div class="col-md-4">
+                            <label class="control-label" for="name">Code :</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input id="code" th:field="*{code}" class="form-control" tabindex="3" type="text" required/>
+                            <span id="codeError" th:errors="*{code}"
+                                  th:if="${#fields.hasErrors('code')}" class="error">Error Name</span>
+                        </div>
+                    </div>
+                    <!--Producer Name-->
+                    <div class="form-row text-right">
+                        <div class="col-md-4">
+                            <label class="control-label" for="name">Producer Name :</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input id="name" th:field="*{producerName}" class="form-control" tabindex="3" type="text" required/>
+                            <span id="nameError" th:errors="*{producerName}"
+                                  th:if="${#fields.hasErrors('producerName')}" class="error">Error Name</span>
+                        </div>
+                    </div>
+                    <!--Contact Number Two-->
+                    <div class="form-row text-right">
+                        <div class="col-md-4">
+                            <label class="control-label" for="sponsorName"> Sponsor Name :</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input id="sponsorName" th:field="*{sponsorName}" class="form-control " tabindex="6" type="text" />
+                            <span class="error" th:errors="*{sponsorName}"
+                                  th:if="${#fields.hasErrors('sponsorName')}" id="mobileTwoError">Error Mobile Number</span>
+                        </div>
+                    </div>
+                </div>
+               <!-- Right Side-->
+                <div class="form-group col-md-6 col-sm-6 text-right flex-column">
+                    <!--Email-->
+                    <div class="form-row text-right">
+                        <div class="col-md-4">
+                            <label class="control-label" for="broadcastingDate">Broadcasting Date :</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input id="broadcastingDate" th:field="*{broadcastingDate}" class="form-control" tabindex="7"  required/>
+                            <span class="error" th:errors="*{broadcastingDate}"
+                                  th:if="${#fields.hasErrors('broadcastingDate')}" id="emailError">Error Email</span>
+                        </div>
+                    </div>
+                    <!--Address-->
+                    <div class="form-row text-right">
+                        <div class="col-md-4">
+                            <label class="control-label" for="broadcastingTime">Broadcasting Time :</label>
+                        </div>
+                        <div class="col-md-8">
+                            <textarea id="broadcastingTime" th:field="*{broadcastingTime}" class="form-control" tabindex="8" rows="4" style="font-size: medium" required></textarea>
+                            <span class="error" th:errors="*{broadcastingTime}"
+                                  th:if="${#fields.hasErrors('broadcastingTime')}" id="addressError">Error Address</span>
+                        </div>
+                    </div>
+                    <!--Created by and created at-->
+                    <div id="updateStatus" th:if="${addStatus==false}">
+                        <!--Created by-->
+                        <div class="form-row text-right">
+                            <div class="col-md-4">
+                                <label class="control-label" for="createdBy">Created By :</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input id="createdBy" th:field="*{createdBy}" class="form-control" type="text" readonly/>
+                            </div>
+                        </div>
+                        <!--Created at-->
+                        <div class="form-row text-right">
+                            <div class="col-md-4">
+                                <label class="control-label" for="createdAt">Created At :</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input id="createdAt" th:field="*{createdAt}" class="form-control" type="text" readonly/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--Button-->
+                <div class="form-group col-md-12 col-sm-12 text-center flex-column ">
+                    <!--Back Button-->
+                    <a class="btn btn-dark"  tabindex="11" href="/programme">
+                        <i class="fas fa-arrow-circle-left" style="font-size: 20px"></i>&nbsp;&nbsp;Back
+                    </a>
+                    <!--Save Button-->
+                    <button class="btn btn-success ml-5" type="submit" tabindex="9">
+                        <i class="fa fa-save " style="font-size: 20px"></i>&nbsp;&nbsp;<span id="submit" th:text="${addStatus==true?'Save': '/programme/update'}"></span>
+                    </button>
+                    <!--Cancel Button-->
+                    <button class="btn btn-warning ml-5" type="reset" tabindex="10">
+                        <i class="far fa-times-circle" style="font-size: 20px"></i>&nbsp;&nbsp;Cancel
+                    </button>
+                </div>
+                <!--Error-->
+                <div class="form-row">
+                    <label id="errorLabel" th:if="${#fields.hasErrors('*')}" th:text="'Errors: '">Errors: </label>
+                    <ul>
+                        <li id="error" th:each="err: ${#fields.errors('*')}" th:text="${err}" class="error"></li>
+                    </ul>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<!--footer include-->
+<footer th:replace="~{fragments/footer :: footerFragment}"></footer>
+<!--script include-->
+<script th:replace="~{fragments/script :: scriptFragment}"></script>
+
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<link th:href="@{/css/style.css}" media="all" rel="stylesheet" type="text/css"/>
+<head>
+    <meta charset="UTF-8">
+    <title>Srilanka Rupavahini </title>
+
+</head>
+<body>
+<div class="loginbox">
+    <img src="img/avatar.png" class="avatar">
+    <h1>Login Here</h1>
+
+    <form th:action="${'/login'}" method="post">
+        <p>Username</p>
+        <input type="text" id="username" th:name="${'username'}" class="form-control" placeholder="username"
+               required>
+        <p>Password</p>
+        <input type="password" id="inputPassword" th:name="${'password'}" class="form-control"
+               placeholder="password"
+               required>
+        <input type="submit" name="" value="Login">
+    </form>
+
+</div>
+
+</body>
+</html>
+
+
+

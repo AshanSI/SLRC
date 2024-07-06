@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+
+<head>
+    <meta charset='utf-8' content="Uvin" name="Uvin"/>
+
+    <link th:href="@{/css/fullcalendar.css}" rel='stylesheet' />
+    <link th:href="@{/css/fullcalendar.print.css}" rel='stylesheet' media='print' />
+    <script th:src="@{/js/jquery.min.js}"></script>
+
+    <link href="http://fullcalendar.io/js/fullcalendar-2.2.5/fullcalendar.css"
+          th:href="@{/webjars/fullcalendar/2.2.5/fullcalendar.css}" rel="stylesheet"></link>
+    <link href="http://fullcalendar.io/js/fullcalendar-2.2.5/fullcalendar.print.css"
+          th:href="@{/webjars/fullcalendar/2.2.5/fullcalendar.print.css}" rel="stylesheet" media="print"></link>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!--=========================*
+              All CSS
+    *===========================-->
+
+    <link th:href="@{/css/all.css}" rel="stylesheet">
+    <script th:src="@{/js/all.js}" type="text/javascript"></script>
+    <!--=========================*
+               Toastr Css
+    *===========================-->
+    <link rel="stylesheet" th:href="@{/css/toastr.min.css}">
+    <style>
+
+        body {
+            margin: 40px 10px;
+            padding: 0;
+            font-family: "Lucida Grande", Helvetica, Arial, Verdana, sans-serif;
+            font-size: 14px;
+        }
+
+        #calendar {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="row">
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card_title">Create Event</h3>
+                <!-- the events -->
+                <form method="post" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group wd-xs-300">
+                                <label class="form-control-label">Event Name : <span
+                                        class="tx-danger">*</span></label>
+                                <input type="text" id="eventname" name="eventname" class="form-control"
+                                       placeholder="Event Name "
+                                       required>
+                                <div id="eventnameerror" class="abc d-none">
+                                    <p style="color:red;"> Please Enter Valid Event Name</p>
+                                </div>
+                            </div><!-- form-group -->
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group wd-xs-300">
+                                <label class="form-control-label">Description : <span
+                                        class="tx-danger">*</span></label>
+                                <textarea id="description" name="description" class="form-control"
+                                          placeholder="Description" required></textarea>
+                                <div id="descriptionerror" class="abc d-none">
+                                    <p style="color:red;">Please Enter Valid Description </p>
+                                </div>
+                            </div><!-- form-group -->
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group wd-xs-300">
+                                <label class="form-control-label">Event Begin Time : <span
+                                        class="tx-danger">*</span></label>
+                                <input type="datetime-local" id="eventbegintime" name="eventbegintime"
+                                       class="form-control"
+                                       placeholder="Event Begin Time "
+                                       required>
+                                <div id="eventbeginerror" class="abc d-none">
+                                    <p style="color:red;">Please Enter Valid Event Begin Time</p>
+                                </div>
+                            </div><!-- form-group -->
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group wd-xs-300">
+                                <label class="form-control-label">Event End Time : <span
+                                        class="tx-danger">*</span></label>
+                                <input type="datetime-local" id="eventendtime" name="eventendtime" class="form-control"
+                                       placeholder="Event Begin Time "
+                                       required>
+                                <div id="eventendtimeerror" class="abc d-none">
+                                    <p style="color:red;">Please Enter Valid Event End Time</p>
+                                </div>
+                            </div><!-- form-group -->
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group wd-xs-300">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="exampleRadios" id="SingleDay"
+                                           value="SingleDay" checked>
+                                    <label class="form-check-label" for="SingleDay">
+                                        Single Day
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group wd-xs-300">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="exampleRadios" id="BulkDays"
+                                           value="BulkDays">
+                                    <label class="form-check-label" for="BulkDays">
+                                        Bulk Days
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <button class="btn btn-primary" id="eventAdd" type="button" onclick="eventmangement()"
+                            data-style="expand-left">
+                        <span class="ladda-label">Submit</span>
+                    </button>
+                </form>
+
+
+            </div>
+        </div>
+    </div>
+    <div id='calendar' th:id="calendar"></div>
+</div>
+
+<div id="calendarModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pd-20">
+                <div class="row">
+                    <div class="form-group wd-xs-300 col-md-6 col-sm-12 col-lg-6">
+                        <input id="eventid" class="d-none">
+                        <label class="form-control-label">Event Name : <span
+                                class="tx-danger">*</span></label>
+                        <input type="text" id="eventnamemodal" name="eventnamemodal" class="form-control"
+                               placeholder="Event Name"
+                               required>
+                        <div id="eventnamemodalerror" class="abc d-none">
+                            <p style="color:red;">Please Enter Valid Event Name </p>
+                        </div>
+                    </div><!-- form-group -->
+
+
+                    <div class="form-group wd-xs-300 col-md-6 col-sm-12 col-lg-6">
+                        <label class="form-control-label">Description : <span
+                                class="tx-danger">*</span></label>
+                        <textarea id="descriptionmodal" name="descriptionmodal" class="form-control"
+                                  placeholder="Description" required></textarea>
+                        <div id="descriptionmodalerror" class="abc d-none">
+                            <p style="color:red;">Please Enter Valid Description </p>
+                        </div>
+                    </div><!-- form-group -->
+
+                    <div class="form-group wd-xs-300 col-md-6 col-sm-12 col-lg-6">
+                        <label class="form-control-label">Event Begin Time : <span
+                                class="tx-danger">*</span></label>
+                        <input type="datetime-local" id="EventBeginTimemodal" name="EventBeginTimemodal"
+                               class="form-control"
+                               placeholder="Event Begin Time" required>
+                        <div id="EventBeginTimemodalerror" class="abc d-none">
+                            <p style="color:red;">Please Enter Valid Event Begin Time </p>
+                        </div>
+                    </div><!-- form-group -->
+                    <div class="form-group wd-xs-300 col-md-6 col-sm-12 col-lg-6">
+                        <label class="form-control-label">Event End Time : <span
+                                class="tx-danger">*</span></label>
+                        <input type="datetime-local" id="EventEndTimemodal" name="EventEndTimemodal"
+                               class="form-control"
+                               placeholder="Event End Time"
+                               required>
+                        <div id="EventEndTimemodalerror" class="abc d-none">
+                            <p style="color:red;">Please Enter Valid Event End Time </p>
+                        </div>
+                    </div><!-- form-group -->
+                    <div class="form-group wd-xs-300 col-md-6 col-sm-12 col-lg-6">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="exampleRadiosmodal" id="SingleDaymodal"
+                                   value="SingleDay" checked>
+                            <label class="form-check-label" for="SingleDaymodal">
+                                Single Day
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group wd-xs-300 col-md-6 col-sm-12 col-lg-6">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="exampleRadiosmodal" id="BulkDaysmodal"
+                                   value="BulkDays">
+                            <label class="form-check-label" for="BulkDaysmodal">
+                                Bulk Days
+                            </label>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div><!-- modal-body -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="updateevent()">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" th:src="@{/js/moment.min.js}"></script>
+
+
+
+
+<script src="http://cdn.jsdelivr.net/webjars/jquery/3.4.1/jquery.min.js"
+        th:src="@{/webjars/jquery/3.4.1/jquery.min.js}" type="text/javascript"></script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+
+        crossorigin="anonymous"></script>
+
+<script th:src="@{/webjars/bootstrap/4.4.1/js/bootstrap.min.js}"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+
+        crossorigin="anonymous"></script>
+
+<!--base Component -->
+<script type="text/javascript" th:src="@{/js/baseComponet.js}"></script>
+
+<!-- Toastr Js -->
+<script type="text/javascript" th:src="@{/js/toastr.min.js}"></script>
+<!-- Toastr Init-->
+<script type="text/javascript" th:src="@{/js/toastr.js}"></script>
+
+<!--<script th:src="@{/js/moment.min.js}"></script>-->
+<script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"
+        th:src="@{/webjars/momentjs/2.9.0/min/moment.min.js}" type="text/javascript"></script>
+
+<!--<script th:src="@{/js/fullcalendar.js}"></script>-->
+<script src="http://fullcalendar.io/js/fullcalendar-2.2.5/fullcalendar.min.js"
+        th:src="@{/webjars/fullcalendar/2.2.5/fullcalendar.min.js}" type="text/javascript"></script>
+
+<script>
+
+    $(document).ready(function () {
+        //
+        // elem = document.getElementById("EventBeginTimemodal")
+        // var now = new Date();
+        // var iso = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString();
+        // var minDate = iso.substring(0, iso.length - 8);
+        // elem.value = minDate
+        // elem.min = minDate
+        //
+        // elem = document.getElementById("EventEndTimemodal")
+        // var iso = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString();
+        // var minDate = iso.substring(0, iso.length - 8);
+        // elem.value = minDate
+        // elem.min = minDate
+
+
+        elem = document.getElementById("eventbegintime");
+        var now = new Date();
+        var iso = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString();
+        var minDate = iso.substring(0, iso.length - 8);
+        elem.value = minDate;
+        elem.min = minDate;
+
+        elem = document.getElementById("eventendtime");
+        var iso = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString();
+        var minDate = iso.substring(0, iso.length - 8);
+        elem.value = minDate;
+        elem.min = minDate;
+
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = today.getFullYear();
+
+        today = mm + '-' + dd + '-' + yyyy;
+        $('#calendar').fullCalendar({
+            header: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'month,agendaWeek,agendaDay'
+            },
+            defaultDate: today,
+            editable: false,
+            eventLimit: false, // allow "more" link when too many events
+            eventSources: [
+                {
+                    url: '/allevents/one',
+                    type: 'GET',
+                    error: function () {
+                        alert('there was an error while fetching events!');
+                    },
+                    color: 'blue',   // a non-ajax option
+                    textColor: 'white' // a non-ajax option
+                },
+                {
+                    url: '/allevents/bulk',
+                    type: 'GET',
+                    error: function () {
+                        alert('there was an error while fetching events!');
+                    },
+                    color: 'orange',   // a non-ajax option
+                    textColor: 'black' // a non-ajax option
+                }
+            ],
+            eventRender: function (event, element) {
+                element.append("<button type=\"button\" class=\"btn btn-danger closeon\">X</button>");
+                element.find(".closeon").click(function () {
+                    let id = event._id;
+
+                    $.ajax({
+                        type: "POST",
+                        url: "http://localhost:8084/" + 'event/delete/' + id,
+                        processData: false,
+                        cache: false,
+                        // enctype: 'multipart/form-data',
+                        dataType: 'json',
+                        contentType: "application/json; charset=utf-8",
+                        error: function () {
+                            showToast(TOAST_TYPE.DANGER, 'Error !', 'Something went wrong !');
+                        },
+                        success: function () {
+                            showToast(TOAST_TYPE.SUCCESS, 'Success !', 'Event Deleted Successfully !');
+                            $('#calendar').fullCalendar('removeEvents', event._id);
+                        }
+                    }).done(function (data) {
+                    });
+                });
+
+                element.append("<button type=\"button\" class=\"btn btn-secondary abcde\">E</button>");
+                element.find(".abcde").click(function () {
+                    let id = event._id;
+
+                    $.ajax({
+                        type: "GET",
+                        url: "http://localhost:8084/" + 'allevents',
+                        dataType: 'json',
+                        error: function (data) {
+                            // showToast(TOAST_TYPE.DANGER, 'Error !', 'Something went wrong !');
+                        }
+                    }).done(function (data) {
+                        for (let i in data) {
+                            let newdata = data[i];
+                            let eventid = newdata['id'];
+
+                            if (id == eventid) {
+                                let title = newdata['title'];
+                                let eventtype = newdata['eventtype'];
+                                let start1 = newdata['start'];
+                                let finish1 = newdata['finish'];
+                                let start = moment(start1).format("YYYY-MM-DD\THH:mm");
+                                let finish = moment(finish1).format("YYYY-MM-DD\THH:mm");
+                                console.log(start1,finish1);
+                                let description = newdata['description'];
+
+                                $('#eventid').val(id);
+                                $('#EventBeginTimemodal').val(start);
+
+
+                                $('#EventEndTimemodal').val(finish);
+                                $('#descriptionmodal').val(description);
+                                $('#eventnamemodal').val(title);
+                                if (eventtype == "BulkDays") {
+                                    $("#BulkDaysmodal").prop("checked", true);
+                                } else {
+                                    $("#SingleDaymodal").prop("checked", true);
+                                }
+
+                            }
+                        }
+                    });
+
+                    $('#exampleModalLongTitle').html(event.title);
+                    $('#calendarModal').modal("show");
+                    $('#calendar').fullCalendar('updateEvent', event);
+                });
+
+            },
+            eventClick: function (event, element) {
+                // event.title = "CLICKED!";
+
+
+            }
+        });
+    });
+
+
+    function eventmangement() {
+
+        let title = $('#eventname').val();
+        let description = $('#description').val();
+        let start = $('#eventbegintime').val();
+        let finish = $('#eventendtime').val();
+        let eventtype = $('input[name=exampleRadios]:checked').val();
+
+        var finish1 = new Date(finish);
+        var start1 = new Date(start);
+        if (finish1.getTime() > start1.getTime() && start1.getDate() <= finish1.getDate()) {
+            $.ajax({
+                type: "POST",
+                url: "http://localhost:8084/" + 'event/add',
+                processData: false,
+                cache: false,
+                // enctype: 'multipart/form-data',
+                dataType: 'json',
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify({
+                    title: title,
+                    description: description,
+                    start: start,
+                    finish: finish,
+                    eventtype: eventtype,
+                }),
+
+                error: function () {
+                    showToast(TOAST_TYPE.DANGER, 'Error !', 'Something went wrong !');
+                },
+                success: function () {
+                    showToast(TOAST_TYPE.SUCCESS, 'Success !', 'Event Added Successfully !');
+                    $('#eventbegintime').css('border-color', '');
+                    $('#eventendtime').css('border-color', '');
+                    location.reload();
+
+                }
+            }).done(function (data) {
+            });
+        } else {
+            showToast(TOAST_TYPE.DANGER, 'Error !', 'Something went wrong !');
+            $('#eventbegintime').css('border-color', 'red');
+            $('#eventendtime').css('border-color', 'red');
+        }
+    }
+
+    function updateevent() {
+        let id = $('#eventid').val();
+        let title = $('#eventnamemodal').val();
+        let description = $('#descriptionmodal').val();
+        let start = $('#EventBeginTimemodal').val();
+        let finish = $('#EventEndTimemodal').val();
+        let eventtype = $('input[name=exampleRadiosmodal]:checked').val();
+
+        var finish1 = new Date(finish);
+        var start1 = new Date(start);
+        if (finish1.getTime() > start1.getTime() && start1.getDate() <= finish1.getDate()) {
+            $.ajax({
+                type: "POST",
+                url: "http://localhost:8084/" + 'event/update',
+                processData: false,
+                cache: false,
+                // enctype: 'multipart/form-data',
+                dataType: 'json',
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify({
+                    id: id,
+                    title: title,
+                    description: description,
+                    start: start,
+                    finish: finish,
+                    eventtype: eventtype,
+                }),
+
+                error: function () {
+                    showToast(TOAST_TYPE.DANGER, 'Error !', 'Something went wrong !');
+                },
+                success: function () {
+                    showToast(TOAST_TYPE.SUCCESS, 'Success !', 'Event Added Successfully !');
+                    $('#EventEndTimemodal').css('border-color', '');
+                    $('#EventBeginTimemodal').css('border-color', '');
+                    location.reload();
+                }
+            }).done(function (data) {
+            });
+        } else {
+            showToast(TOAST_TYPE.DANGER, 'Error !', 'Something went wrong !');
+            $('#EventEndTimemodal').css('border-color', 'red');
+            $('#EventBeginTimemodal').css('border-color', 'red');
+        }
+    }
+
+</script>
+</body>
+</html>

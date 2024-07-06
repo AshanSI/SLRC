@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: headerFragment}">
+    <meta charset="UTF-8">
+    <title>episode-detail</title>
+</head>
+<body>
+<nav th:replace="~{fragments/navBar :: navBarFragment}"></nav>
+
+<!--heading Area-->
+<div class="container-fluid bg-dark form-Border">
+    <div class="row text-center formManagement border-info">
+        <!--View List Button-->
+        <div class="col">
+            <a href="/episode" class="btn btn-primary" tabindex="1">
+                <i class="fa fa-list" style="font-size: 20px"></i>&nbsp;&nbsp;View List
+            </a>
+        </div>
+        <!--episode Name-->
+        <div class="col">
+            <h2 class="text-light text-center">
+                <strong>
+                    <p th:text="${episodeDetail.programmeCode}"></p>
+                </strong>
+            </h2>
+        </div>
+        <!--Home Button-->
+        <div class="col">
+            <a class="btn btn-primary" href="/home" tabindex="2">
+                <i class="fa fa-home" style="font-size: 20px"></i> &nbsp;&nbsp;Home
+            </a>
+        </div>
+    </div>
+</div>
+<!--details-->
+<div class="container-fluid bg-dark formBorder">
+    <div class="col-sm-12 flex-column" th:fragment="episodeDetailsFragment">
+        <div class="row">
+            <!--Left Side-->
+            <div class="form-group col-md-6 col-sm-6 text-left flex-column">
+                <!--id-->
+                <div class="form-row text-right">
+                    <div class="col-md-4">
+                        <label class="control-label" for="id">ID :</label>
+                    </div>
+                    <div class="col-md-8">
+                        <p id="id" th:text="${episodeDetail.id}" class="display_detail"></p>
+                    </div>
+                </div>
+                <!--Code-->
+                <div class="form-row text-right">
+                    <div class="col-md-4">
+                        <label class="control-label" for="code">episode Code :</label>
+                    </div>
+                    <div class="col-md-8">
+                        <p id="code" th:text="${episodeDetail.code}" class="display_detail"></p></div>
+                </div>
+                <!--Name-->
+                <div class="form-row text-right">
+                    <div class="col-md-4">
+                        <label class="control-label" for="name">Company Name :</label>
+                    </div>
+                    <div class="col-md-8">
+                        <p id="name" th:text="${episodeDetail.programmeCode}"
+                           class="display_detail"></p>
+                    </div>
+                </div>
+                <!--BRN-->
+                <div class="form-row text-right">
+                    <div class="col-md-4">
+                        <label class="control-label" for="brn">Code :</label>
+                    </div>
+                    <div class="col-md-8">
+                        <p id="brn" th:text="${episodeDetail.code}" class="display_detail"></p>
+                    </div>
+                </div>
+                <!--Contact One-->
+             <!--   <div class="form-row text-right">
+                    <div class="col-md-4">
+                        <label class="control-label" for="contactOne">Contact No1 :</label>
+                    </div>
+                    <div class="col-md-8">
+                        <p id="contactOne" th:text="${episodeDetail.contactOne}" class="display_detail"></p>
+                    </div>
+                </div>
+                &lt;!&ndash;Contact Two&ndash;&gt;
+                <div class="form-row text-right">
+                    <div class="col-md-4">
+                        <label class="control-label" for="contactTwo">Contact No2 :</label>
+                    </div>
+                    <div class="col-md-8">
+                        <p id="contactTwo" th:text="${episodeDetail.contactTwo}" class="display_detail"></p>
+                    </div>
+                </div>
+            </div>-->
+            <!--Right Side-->
+            <!--<div class="form-group col-md-6 col-sm-6 text-right flex-column">
+                &lt;!&ndash;Email&ndash;&gt;
+                <div class="form-row text-right">
+                    <div class="col-md-4">
+                        <label class="control-label" for="email">location :</label>
+                    </div>
+                    <div class="col-md-8">
+                        <p id="email" th:text="${episodeDetail.location}" class="display_detail"></p>
+                    </div>
+                </div>-->
+                <!--Location-->
+                <div class="form-row text-right">
+                    <div class="col-md-4">
+                        <label class="control-label" for="location">Address :</label>
+                    </div>
+                    <div class="col-md-8 text-left">
+                        <p id="location" class="display_detail " th:utext="${episodeDetail.episodeNumber}"></p>
+                    </div>
+                </div>
+                <!--Created By-->
+                <div class="form-row text-right">
+                    <div class="col-md-4">
+                        <label class="control-label" for="createdBy">Created By :</label>
+                    </div>
+                    <div class="col-md-8">
+                        <p id="createdBy" th:text="${episodeDetail.createdBy}" class="display_detail"></p>
+                    </div>
+                </div>
+                <!--Created at-->
+                <div class="form-row text-right">
+                    <div class="col-md-4">
+                        <label class="control-label" for="createdAt">Created At :</label>
+                    </div>
+                    <div class="col-md-8">
+                        <p id="createdAt" th:text="${#temporals.format(episodeDetail.createdAt, 'dd-MM-yyyy HH:mm')}"
+                           class="display_detail"></p>
+                    </div>
+                </div>
+                <!--Updated by-->
+                <div class="form-row text-right">
+                    <div class="col-md-4">
+                        <label class="control-label" for="updatedBy">Updated By :</label>
+                    </div>
+                    <div class="col-md-8">
+                        <p id="updatedBy" th:text="${#temporals.format(episodeDetail.updatedAt, 'dd-MM-yyyy HH:mm')}" class="display_detail"></p>
+                    </div>
+                </div>
+                <!--Updated at-->
+                <div class="form-row text-right">
+                    <div class="col-md-4">
+                        <label class="control-label" for="updatedAt">Updated At :</label>
+                    </div>
+                    <div class="col-md-8">
+                        <p id="updatedAt" th:text="${{episodeDetail.updatedAt}}" class="display_detail"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Back Button-->
+    <div class="form-group col-md-12 col-sm-12 text-center flex-column ">
+        <a href="/episode">
+            <button class="btn btn-dark mb-5" type="button" tabindex="3">
+                <i class="fa fa-arrow-circle-left" style="font-size: 20px"></i>&nbsp; &nbsp;Back
+            </button>
+        </a>
+    </div>
+</div>
+
+<!--footer include-->
+<footer th:replace="~{fragments/footer :: footerFragment}"></footer>
+<!--script include-->
+<script th:replace="~{fragments/script :: scriptFragment}"></script>
+
+</body>
+</html>

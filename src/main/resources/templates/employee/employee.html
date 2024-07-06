@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: headerFragment}">
+    <meta charset="UTF-8">
+    <title>employee</title>
+</head>
+<body>
+<nav th:replace="~{fragments/navBar :: navBarFragment}"></nav>
+<!--heading Area-->
+<div class="container-fluid bg-dark form-Border">
+    <div class="row text-center formManagement border-info">
+        <!--New employee Button-->
+        <div class="col">
+            <a class="btn btn-success" href="/employee/add" tabindex="1">
+                <i class="fa fa-plus" style="font-size: 20px"></i>&nbsp;&nbsp;New</a>&nbsp;
+        </div>
+        <!--List Name-->
+        <div class="col">
+            <h2 class="text-white text-center">
+                <strong>
+                    employee List
+                </strong>
+            </h2>
+        </div>
+        <!--Home Button-->
+        <div class="col">
+            <a href="/home" id="searchShow" class="btn btn-primary" tabindex="2">
+                <!--<i class="fa fa-user " style="font-size: 20px"></i>&nbsp;Add&nbsp;-->
+                <i class="fas fa-home" style="font-size: 20px"></i>&nbsp;&nbsp;Home&nbsp;
+            </a>
+        </div>
+    </div>
+</div>
+<!--Employee List-->
+<div class="container-fluid bg-dark formBorder text-center">
+    <!--employee List Table-->
+    <div class="col">
+        <div class="col"  id="employeesListPresent" th:if="${not #lists.isEmpty(employees)}">
+            <table class="table table-hover table-striped" id="myTable">
+                <thead>
+                <tr>
+                    <th> Index</th>
+                    <th> employee Name</th>
+                    <th> Code</th>
+                    <th> Email</th>
+                    <th> Address</th>
+                    <th> Modify</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="employee, rowCount : ${employees}">
+                    <th th:text="${rowCount.count}"></th>
+                    <th th:text="${employee.name}"></th>
+                    <th th:text="${employee.nic}"></th>
+                    <th th:text="${employee.email}"></th>
+                    <th th:text="${employee.address}"></th>
+                    <th>
+                        <a id="employeeView" th:href="${'/employee/' + employee.id}" class="btn btn-primary btn-sm"><i class="fa fa-folder-open" style="font-size: 15px"></i>&nbsp;View</a>
+                        <a id="employeeEdit" th:href="${'/employee/edit/' + employee.id}" class="btn btn-success btn-sm"><i class="fa fa-edit" style="font-size: 15px"></i>&nbsp;Edit</a>
+                        <a id="employeeRemove" th:href="${'/employee/delete/' + employee.id}" class="btn btn-danger btn-sm">
+                            <!--th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"--> <i class="fa fa-trash" style="font-size: 15px"></i> Delete</a>
+                    </th>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!--Error-->
+    <div class="row" th:if="${ #lists.isEmpty(employees)}">
+        <div class="col-sm-12">
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h3 class="text-center text-danger">
+                    <strong>There is no employee upto now please add employee to the system using add user button.</strong>
+                </h3>
+            </div>
+        </div>
+        <script>
+            /*active boostrap alert - start*/
+            $(".alert").alert();
+            /*active boostrap alert - end*/
+        </script>
+    </div>
+    <!--TODO-->
+    <!--Save employee show-->
+</div>
+<!--footer include-->
+<footer th:replace="~{fragments/footer :: footerFragment}"></footer>
+<!--script include-->
+<script th:replace="~{fragments/script :: scriptFragment}"></script>
+
+</body>
+</html>
